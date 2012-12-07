@@ -15,9 +15,28 @@ class Player < Chingu::GameObject
 		@x = 400
 		@y = 300
 		@image = Gosu::Image["Ship.png"]
+		self.input = {
+			holding_left: :left,
+			holding_right: :right,
+			holding_up: :up,
+			holding_down: :down
+		}
+	end
 
+	def left
+		@x -= 5
+	end
 
+	def right
+		@x += 5
+	end
+	
+	def up
+		@y -= 5
+	end
 
+	def down
+		@y += 5
 	end
 
 
