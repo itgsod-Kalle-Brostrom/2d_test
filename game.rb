@@ -6,6 +6,7 @@ class Game < Chingu::Window
 		super # Anropar metoden med samma namn i superklassen
 		self.input = {esc: :exit}
 		Player.create
+		Background.create
 	end
 end
 
@@ -52,8 +53,19 @@ class Laser < Chingu::GameObject
 	def setup
 		@image = Gosu::Image["Laser.png"]
 		self.velocity_y = -10
+		Gosu::Sound["Laser.wav"].play
 		after(5000) {self.destroy}
 	end
+end
+
+class Background < Chingu::GameObject
+
+	def setup
+		@x, @y = 110,230
+		@image = Gosu::Image["lala.png"]
+		@zorder = 0
+	end
+
 end
 
 Game.new.show
