@@ -5,8 +5,18 @@ class Game < Chingu::Window
 	def initialize
 		super # Anropar metoden med samma namn i superklassen
 		self.input = {esc: :exit}
-		Player.create
+		@player = Player.create
 		Background.create
+		5.times {Asteroid.create}
+	end
+
+	def update
+		super
+		Laser.each_bounding_circle_collision(Asteroid) do |laser, target|
+      		laser.destroy
+      		target.hide
+      		Asteroid.create(x: rand($window.width), y: rand($window.height))
+    	end
 	end
 end
 
@@ -47,6 +57,7 @@ class Player < Chingu::GameObject
 end
 
 class Laser < Chingu::GameObject
+	has_traits :velocity, :collision_detection, :bounding_circle, :timer
 
 	has_traits :velocity, :timer
 
@@ -68,4 +79,25 @@ class Background < Chingu::GameObject
 
 end
 
+class Asteroid < Chingu::GameObject
+	has_traits :collision_detection, :bounding_circle, :velocity, :timer
+
+	def setup
+		@x = rand(800)
+		@y = 100
+		@rotation = rand()
+		@velocity_y = rand()
+		@velocity_x = rand()
+		@image = Gosu::Image["Asteroid.png"]
+	end
+
+	def hide
+		@x = -300
+		@y = -300
+		after(1000) do
+			@x = rand(400) + 100
+			@y = rand(300) + 100
+		end
+	end
+end
 Game.new.show
